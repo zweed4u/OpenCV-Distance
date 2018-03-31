@@ -51,6 +51,7 @@ for imagePath in IMAGE_PATHS:
 	cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
 	cv2.putText(image, "%.2fft" % (inches / 12),
 		(image.shape[1] - 200, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
-		2.0, (0, 255, 0), 3)
+		1.0, (0, 255, 0), 3)
+	image = cv2.resize(image, (500, 640))                    # Resize image
 	cv2.imshow("image", image)
 	cv2.waitKey(0)
