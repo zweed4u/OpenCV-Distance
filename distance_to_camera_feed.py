@@ -35,6 +35,9 @@ KNOWN_WIDTH = 5.0
 # from our camera, then find the paper marker in the image, and initialize
 # the focal length
 image = cv2.imread("new/1ft.JPG")
+
+
+# TODO filter/mask should go here
 marker = find_marker(image)
 focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
 
