@@ -30,30 +30,35 @@ KNOWN_DISTANCE = 12.0
 # paper is 5 inches wide
 KNOWN_WIDTH = 5.0
  
-# initialize the list of images that we'll be using
-IMAGE_PATHS = ["new/1ft.JPG", "new/2ft.JPG", "new/3ft.JPG"]
  
 # load the furst image that contains an object that is KNOWN TO BE 1 feet
 # from our camera, then find the paper marker in the image, and initialize
 # the focal length
-image = cv2.imread(IMAGE_PATHS[0])
+image = cv2.imread("new/1ft.JPG")
 marker = find_marker(image)
 focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
 
-# loop over the images
-for imagePath in IMAGE_PATHS:
-    # load the image, find the marker in the image, then compute the
-    # distance to the marker from the camera
-    image = cv2.imread(imagePath)
-    marker = find_marker(image)
+cap = cv2.VideoCapture(0)
+while 1:
+    _, frame = cap.read()
+
+
+    image = cv2.imshow('image', frame)
+    marker = find_marker(frame)
     inches = distance_to_camera(KNOWN_WIDTH, focalLength, marker[1][0])
  
     # draw a bounding box around the image and display it
     box = np.int0(cv2.boxPoints(marker))
-    cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
-    cv2.putText(image, "%.2fft" % (inches / 12),
-        (image.shape[1] - 200, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
-        1.0, (0, 255, 0), 3)
-    resized_image = cv2.resize(image, (500, 640))                    # Resize image
+    cv2.drawContours(frame, [box], -1, (0, 255, 0), 2)
+    cv2.putText(frame, "%.2fft" % (inches / 12), (frame.shape[1] - 200, frame.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 3)
+    resized_image = cv2.resize(frame, (500, 640))                    # Resize image
     cv2.imshow("image", resized_image)
-    cv2.waitKey(0)
+
+
+    # Close all on 'q' press
+    k = cv2.waitKey(5) & 0xFF
+    if k == ord('q'):
+        break
+
+cv2.destroyAllWindows()
+cap.release()
