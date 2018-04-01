@@ -46,7 +46,7 @@ while 1:
     image = cv2.imshow('image', frame)
     marker = find_marker(frame)
     inches = distance_to_camera(KNOWN_WIDTH, focalLength, marker[1][0])
- 
+    print(f'{inches / 12}ft')
     # draw a bounding box around the image and display it
     box = np.int0(cv2.boxPoints(marker))
     cv2.drawContours(frame, [box], -1, (0, 255, 0), 2)
